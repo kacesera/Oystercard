@@ -12,4 +12,9 @@ describe Oystercard do
     expect(card.balance).to eq 5
   end
 
+  it 'raises error if cash input surpasses default max' do
+    default_value = Oystercard::DEFAULT_MAX
+    expect { card.add_money(95) }.to raise_error('Max balance is' + default_value.to_s)
+  end
+
 end
