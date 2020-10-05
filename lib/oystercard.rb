@@ -12,7 +12,15 @@ class Oystercard
     add_money(cash)
   end
 
+  def deduct_fare(fare)
+    subtract_money(fare)
+  end
+
   private
+
+  def subtract_money(fare)
+    @balance -= fare 
+  end
 
   def add_money(cash)
     @balance += cash
