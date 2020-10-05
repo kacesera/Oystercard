@@ -1,3 +1,3 @@
 Object | Behaviour
 -------|----------
-Oystercard|Can have money
+Oystercard|Can have money, #add_money
