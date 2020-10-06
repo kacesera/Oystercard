@@ -18,13 +18,6 @@ describe Oystercard do
     expect { card.top_up 1 }.to raise_error "Max balance of #{default_max} is exceeded"
   end
 
-  it 'deducts fare from the balance' do
-    default_max = Oystercard::DEFAULT_MAX
-    card.top_up(default_max)
-    card.deduct_fare(3)
-    expect(card.balance).to eq 87
-  end
-
   describe '#touch_in' do
     it 'changes the @status of the Oystercard to true' do
       card.top_up(5)
@@ -44,6 +37,19 @@ describe Oystercard do
       card.touch_out
       expect(card.in_journey?).to be false
     end
+
+    it 'says "Have a good day!"' do
+      card.top_up(5)
+      card.touch_in
+      expect { card.touch_out }.to output("Have a good day!\n").to_stdout
+    end
+
+    it 'deducts minimum fare from balance' do
+      card.top_up(5)
+      card.touch_in
+      expect { card.touch_out }.to change {card.balance}.by -1
+    end
+
   end
 
 end

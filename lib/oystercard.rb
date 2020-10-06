@@ -9,17 +9,12 @@ class Oystercard
   end
 
   def top_up(cash)
-    raise "Max balance of #{DEFAULT_MAX} is exceeded" if over_max_balance?(cash)
-
+    over_max_balance?(cash)
     add_money(cash)
   end
 
-  def deduct_fare(fare)
-    subtract_money(fare)
-  end
-
   def touch_in
-    raise "INSUFFICIENT FUNDS" if @balance < MIN_FARE
+    raise "INSUFFICIENT FUNDS" if insufficient_funds?
     @travelling = true
   end
 
@@ -28,14 +23,19 @@ class Oystercard
   end
 
   def touch_out
+    deduct_fare
     @travelling = false
+    puts "Have a good day!"
   end
-
 
 
   private
 
-  def subtract_money(fare)
+  def insufficient_funds?
+    @balance < MIN_FARE
+  end
+
+  def deduct_fare(fare = MIN_FARE)
     @balance -= fare
   end
 
@@ -44,7 +44,9 @@ class Oystercard
   end
 
   def over_max_balance?(cash)
-    (cash + balance) > DEFAULT_MAX
+    if (cash + balance) > DEFAULT_MAX
+      raise "Max balance of #{DEFAULT_MAX} is exceeded" 
+    end
   end
 
 end
