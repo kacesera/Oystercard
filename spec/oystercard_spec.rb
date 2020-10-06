@@ -2,10 +2,15 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) { Oystercard.new }
-  let(:mock_station) { double("fake entry station")}
+  let(:mock_entry) { double("fake entry station")}
+  let(:mock_exit) { double("fake exit station")}
 
   it 'initializes with a default balance of zero' do
     expect(card.balance).to be_zero
+  end
+
+  it 'initializes @journeys with an empty array' do 
+    expect(card.journeys).to be_empty
   end
 
   it 'can have money added to it' do
@@ -22,49 +27,49 @@ describe Oystercard do
   describe '#touch_in' do
     it 'changes the @status of the Oystercard to true' do
       card.top_up(5)
-      card.touch_in(mock_station)
+      card.touch_in(mock_entry)
       expect(card.in_journey?).to be true
     end
 
     it 'throws an error if user tries to #touch_in with insufficient funds' do
-      expect{ card.touch_in(mock_station) }.to raise_error "INSUFFICIENT FUNDS"
+      expect{ card.touch_in(mock_entry) }.to raise_error "INSUFFICIENT FUNDS"
     end
-
-    it "remembers the entry station where the user touched in" do
-      card.top_up(10)
-      card.touch_in(mock_station)
-      expect(card.entry_station).to eq(mock_station)
-    end
-
   end
 
   describe '#touch_out' do
-    it 'changes the @status of the Oystercard to true' do
+    it 'changes the @status of the Oystercard to false' do
       card.top_up(5)
-      card.touch_in(mock_station)
-      card.touch_out
+      card.touch_in(mock_entry)
+      card.touch_out(mock_exit)
       expect(card.in_journey?).to be false
-    end
-
-    it 'says "Have a good day!"' do
-      card.top_up(5)
-      card.touch_in(mock_station)
-      expect { card.touch_out }.to output("Have a good day!\n").to_stdout
     end
 
     it 'deducts minimum fare from balance' do
       card.top_up(5)
-      card.touch_in(mock_station)
-      expect { card.touch_out }.to change {card.balance}.by -1
+      card.touch_in(mock_entry)
+      expect { card.touch_out(mock_exit) }.to change {card.balance}.by -1
     end
+  end
 
-    it 'forgets entry station after touching out' do
-      card.top_up(5)
-      card.touch_in(mock_station)
-      card.touch_out
-      expect(card.entry_station).to eq(nil)
-    end
+  describe '#store_journey' do
+    it 'stores the journey in @journeys' do 
+      card.top_up(10)
+      card.touch_in(mock_entry)
+      card.touch_out(mock_exit)
+      expect(card.journeys).to include({entry: mock_entry, exit: mock_exit})
+    end   
+  end
 
+  it 'remembers multiple journeys' do 
+    card.top_up(10)
+
+    2.times { 
+      card.touch_in(mock_entry)
+      card.touch_out(mock_exit)
+    }
+
+    expect(card.journeys.count).to eq 2
+    expect(card.journeys).to eq([{entry: mock_entry, exit: mock_exit}, {entry: mock_entry, exit: mock_exit}])
   end
 
 end
