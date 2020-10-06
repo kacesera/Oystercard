@@ -3,7 +3,8 @@
 
 Object | Behaviour
 -------|----------
-Oystercard|Can have money, #add_money up to £90
+Oystercard|Can have money, #add_money up to £90, @status
+User | #touch_in, #touch_out, #in_journey?
 
 ## How to use
 ``` card = Oystercard.new

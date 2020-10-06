@@ -1,9 +1,10 @@
 class Oystercard
-  attr_reader :balance
+  attr_reader :balance, :status
   DEFAULT_MAX = 90
 
   def initialize
     @balance = 0
+    @status = nil
   end
 
   def top_up(cash)
@@ -14,6 +15,10 @@ class Oystercard
 
   def deduct_fare(fare)
     subtract_money(fare)
+  end
+
+  def change_status(boolean)
+    @status = boolean
   end
 
   private
