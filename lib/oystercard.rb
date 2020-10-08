@@ -6,7 +6,6 @@ class Oystercard
   attr_reader :balance, :journeys
 
   DEFAULT_MAX = 90
-  MIN_FARE = 1
 
   def initialize(journeys=JourneyLog.new)
     @balance = 0
@@ -29,17 +28,16 @@ class Oystercard
 
   def touch_out(exit_station)
     @journeys.finish(exit_station)
-    deduct_fare
+    deduct(@journeys.fare)
   end
 
   private
 
-
   def insufficient_funds?
-    @balance < MIN_FARE
+    @balance < JourneyLog::MIN_FARE
   end
 
-  def deduct_fare(fare = MIN_FARE)
+  def deduct(fare)
     @balance -= fare
   end
 

@@ -35,7 +35,6 @@ describe Oystercard do
   end
 
   describe '#touch_out' do
-
     it 'deducts minimum fare from balance' do
       card.top_up(5)
       card.touch_in(mock_entry)

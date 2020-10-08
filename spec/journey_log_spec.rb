@@ -11,6 +11,7 @@ describe JourneyLog do
   describe '#add_journey' do
     it "adds a journey to @journeys" do
       log = JourneyLog.new
+      allow(completed_journey).to receive(:journey) { completed_journey }
       log.add_journey(completed_journey)
       expect(log.journeys).to include completed_journey
     end
@@ -30,6 +31,7 @@ describe JourneyLog do
       journey_class_double = double(:journey_class)
       log = JourneyLog.new(journey_class_double)
       expect(journey_class_double).to receive(:complete_journey)
+      expect(journey_class_double).to receive(:journey)
       log.finish("Victoria")
     end
 
@@ -37,6 +39,7 @@ describe JourneyLog do
       journey_class_double = double(:journey_class)
       log = JourneyLog.new(journey_class_double)
       allow(journey_class_double).to receive(:complete_journey)
+      allow(journey_class_double).to receive(:journey)
       log.finish("Victoria")
       expect(log.journeys.count).to eq 1
     end
@@ -54,8 +57,22 @@ describe JourneyLog do
       journey_class_double = double(:journey_class)
       log = JourneyLog.new(journey_class_double)
       allow(journey_class_double).to receive(:complete_journey)
+      allow(journey_class_double).to receive(:journey) { journey_class_double }
       log.finish("Victoria")
       expect(log.journeys).to include journey_class_double
+    end
+  end
+
+  describe '#fare' do
+    it 'returns 6 if there is no entry & exit station' do
+      allow(subject).to receive(:no_stations?) {true}
+      expect(subject.fare).to eq 6
+    end
+
+    it 'returns the minimum fare' do
+      min_fare = JourneyLog::MIN_FARE
+      allow(subject).to receive(:no_stations?) {false}
+      expect(subject.fare).to eq min_fare
     end
   end
 end
