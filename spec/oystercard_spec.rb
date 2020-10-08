@@ -9,9 +9,7 @@ describe Oystercard do
     expect(card.balance).to be_zero
   end
 
-  it 'initializes @journeys with an empty array' do 
-    expect(card.journeys).to be_empty
-  end
+
 
   it 'can have money added to it' do
     card.top_up(5)
@@ -37,12 +35,6 @@ describe Oystercard do
   end
 
   describe '#touch_out' do
-    it 'changes the @status of the Oystercard to false' do
-      card.top_up(5)
-      card.touch_in(mock_entry)
-      card.touch_out(mock_exit)
-      expect(card.in_journey?).to be false
-    end
 
     it 'deducts minimum fare from balance' do
       card.top_up(5)
