@@ -21,10 +21,12 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
-    it 'changes in_journey to true' do
+    it 'initializes a new journey' do
+      journey_log_double = double(:journeylog)
+      card = Oystercard.new(journey_log_double)
       card.top_up(5)
-      card.touch_in(mock_entry)
-      expect(card.in_journey?).to be true
+      expect(journey_log_double).to receive(:start)
+      card.touch_in("Victoria")
     end
 
     it 'throws an error if user tries to #touch_in with insufficient funds' do
@@ -41,6 +43,18 @@ describe Oystercard do
     end
   end
 
+  describe '#in_journey?' do
+    it "returns true while in journey" do
+      card.top_up(5)
+      card.touch_in(mock_entry)
+      expect(card.in_journey?).to be
+    end
 
-
+    it "returns false when not in journey" do
+      card.top_up(5)
+      card.touch_in(mock_entry)
+      card.touch_out(mock_exit)
+      expect(card.in_journey?).to be false
+    end
+  end
 end
