@@ -9,8 +9,6 @@ describe Oystercard do
     expect(card.balance).to be_zero
   end
 
-
-
   it 'can have money added to it' do
     card.top_up(5)
     expect(card.balance).to eq 5

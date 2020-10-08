@@ -1,7 +1,7 @@
 class Journey
     attr_reader :journey
 
-    def initialize(entry_station=nil)
+    def initialize(entry_station = nil)
         @journey = {entry: entry_station}
     end
 

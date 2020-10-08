@@ -13,3 +13,4 @@ card.top_up(30)
 
 ```card.deduct_fare(3)
 => 27```
+
