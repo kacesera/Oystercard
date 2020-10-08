@@ -21,7 +21,7 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
-    it 'changes the @status of the Oystercard to true' do
+    it 'changes in_journey to true' do
       card.top_up(5)
       card.touch_in(mock_entry)
       expect(card.in_journey?).to be true
@@ -41,25 +41,6 @@ describe Oystercard do
     end
   end
 
-  describe '#store_journey' do
-    it 'stores the journey in @journeys' do 
-      card.top_up(10)
-      card.touch_in(mock_entry)
-      card.touch_out(mock_exit)
-      expect(card.journeys).to include({entry: mock_entry, exit: mock_exit})
-    end   
-  end
 
-  it 'remembers multiple journeys' do 
-    card.top_up(10)
-
-    2.times { 
-      card.touch_in(mock_entry)
-      card.touch_out(mock_exit)
-    }
-
-    expect(card.journeys.count).to eq 2
-    expect(card.journeys).to eq([{entry: mock_entry, exit: mock_exit}, {entry: mock_entry, exit: mock_exit}])
-  end
 
 end

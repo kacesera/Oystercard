@@ -8,10 +8,9 @@ class Oystercard
   DEFAULT_MAX = 90
   MIN_FARE = 1
 
-  def initialize(current_journey=Journey)
+  def initialize(journeys=JourneyLog.new)
     @balance = 0
-    @journeys = []
-    @current_journey = current_journey
+    @journeys = journeys
   end
 
   def top_up(cash)
@@ -21,25 +20,20 @@ class Oystercard
 
   def touch_in(entry_station)
     raise "INSUFFICIENT FUNDS" if insufficient_funds?
-    @current_journey = @current_journey.new(entry_station)
+    @journeys.start(entry_station)
   end
 
   def in_journey?
-    @current_journey.in_journey?
+    @journeys.in_journey?
   end
 
   def touch_out(exit_station)
-    store_journey(exit_station)
+    @journeys.finish(exit_station)
     deduct_fare
-    @current_journey = Journey
   end
 
   private
 
-  def store_journey(exit_station)
-    @current_journey.complete_journey(exit_station)
-    @journeys << @current_journey.journey
-  end
 
   def insufficient_funds?
     @balance < MIN_FARE

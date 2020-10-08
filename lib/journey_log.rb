@@ -22,6 +22,10 @@ class JourneyLog
     @journeys.dup
   end
 
+  def in_journey?
+    @current_journey.in_journey?
+  end
+
   private
 
   def current_journey
