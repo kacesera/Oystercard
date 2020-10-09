@@ -68,11 +68,5 @@ describe JourneyLog do
       allow(subject).to receive(:no_stations?) {true}
       expect(subject.fare).to eq 6
     end
-
-    it 'returns the minimum fare' do
-      min_fare = JourneyLog::MIN_FARE
-      allow(subject).to receive(:no_stations?) {false}
-      expect(subject.fare).to eq min_fare
-    end
   end
 end

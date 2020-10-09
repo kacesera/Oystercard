@@ -1,5 +1,8 @@
+require_relative 'journey'
+
 class JourneyLog
   MIN_FARE = 1
+  PENALTY = 6
 
   def initialize(current_journey = Journey, journeys = [])
     @journeys = journeys
@@ -28,15 +31,15 @@ class JourneyLog
   end
 
   def fare
-    return 6 if no_stations?
-    MIN_FARE
+    return PENALTY if no_stations?
+    @current_journey.fare
   end
 
   private
 
   def no_stations?
     latest_journey = @journeys[-1]
-    !latest_journey[:exit] && latest_journey[:entry].nil?
+    !latest_journey[:exit] || latest_journey[:entry].nil?
   end
 
   def current_journey

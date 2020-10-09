@@ -33,11 +33,12 @@ class Oystercard
 
   private
 
-  def insufficient_funds?
-    @balance < JourneyLog::MIN_FARE
+  def insufficient_funds?(fare = 0)
+    @balance < JourneyLog::MIN_FARE || (@balance - fare) < 0
   end
 
   def deduct(fare)
+    raise "INSUFFICIENT FUNDS" if insufficient_funds?(fare)
     @balance -= fare
   end
 

@@ -1,7 +1,8 @@
 require 'journey'
 
 describe Journey do
-    let(:station) { double :station }
+    let(:station) { double :station, zone: 1}
+    let(:station_2) { double :station, zone: 1}
 
     describe "#initialization" do
 
@@ -40,6 +41,27 @@ describe Journey do
         end
     end
 
-
+    describe "#fare" do
+        before (:each) do
+            @journey = Journey.new(station)
+            @journey.complete_journey(station_2)
+        end
+        it "calculates a fare from zone 1 to zone 1" do
+            expect(@journey.fare).to eq 1
+        end
+        it "calculates a fare from zone 1 to zone 2" do
+            allow(station_2).to receive(:zone) { 2 }
+            expect(@journey.fare).to eq 2
+        end
+        it "calculates a fare from zone 1 to zone 3" do
+            allow(station_2).to receive(:zone) { 3 }
+            expect(@journey.fare).to eq 3
+        end
+        it "calculates a fare from zone 6 to zone 2" do
+            allow(station).to receive(:zone) { 6 }
+            allow(station_2).to receive(:zone) { 2 }
+            expect(@journey.fare).to eq 5
+        end
+    end
 
 end

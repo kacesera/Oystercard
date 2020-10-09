@@ -2,8 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) { Oystercard.new }
-  let(:mock_entry) { double("fake entry station")}
-  let(:mock_exit) { double("fake exit station")}
+  let(:mock_entry) { double "fake entry station", zone: 1}
+  let(:mock_exit) { double "fake exit station", zone: 1}
 
   it 'initializes with a default balance of zero' do
     expect(card.balance).to be_zero
